@@ -61,7 +61,9 @@ object OAuthHelper {
                 .post(mapOf(
                     "grant_type" to "password",
                     "username" to creds.username!!,
-                    "password${if (creds.secretKey != null) ":${GoogleAuthenticator().getTotpPassword(creds.secretKey)}" else null}" to creds.password!!
+                    "password" to if (creds.secretKey == null) creds.password!! else "${creds.password!!}:${GoogleAuthenticator().getTotpPassword(
+                        creds.secretKey
+                    )}"
                 ))
                 .url("https://www.reddit.com/api/v1/access_token")
                 .basicAuth(creds.clientId to creds.clientSecret)
