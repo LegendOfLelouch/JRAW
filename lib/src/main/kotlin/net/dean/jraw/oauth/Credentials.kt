@@ -19,6 +19,9 @@ class Credentials private constructor(
     /** OAuth2 app client secret. This is an empty string for app or userless app Credentials. */
     val clientSecret: String,
 
+    /** 2 Factor Authentication secret key. */
+    val secretKey: String? = null,
+
     /** A unique, per-device ID */
     val deviceId: UUID? = null,
 
@@ -31,12 +34,21 @@ class Credentials private constructor(
     /** Factory construction methods */
     companion object {
         /** Creates credentials for a script app */
-        @JvmStatic fun script(username: String, password: String, clientId: String, clientSecret: String) =
+        @JvmStatic
+        fun script(
+            username: String,
+            password: String,
+            clientId: String,
+            clientSecret: String,
+            secretKey: String? = null
+        ) =
             Credentials(AuthMethod.SCRIPT,
                 username = username,
                 password = password,
                 clientId = clientId,
-                clientSecret = clientSecret)
+                clientSecret = clientSecret,
+                secretKey = secretKey
+            )
 
         /** Creates credentials for an installed app (Android, iOS, etc.) */
         @JvmStatic fun installedApp(clientId: String, redirectUrl: String) =

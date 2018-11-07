@@ -1,5 +1,6 @@
 package net.dean.jraw.oauth
 
+import com.warrenstrange.googleauth.GoogleAuthenticator
 import net.dean.jraw.RedditClient
 import net.dean.jraw.http.HttpRequest
 import net.dean.jraw.http.NetworkAdapter
@@ -60,7 +61,7 @@ object OAuthHelper {
                 .post(mapOf(
                     "grant_type" to "password",
                     "username" to creds.username!!,
-                    "password" to creds.password!!
+                    "password${if (creds.secretKey != null) ":${GoogleAuthenticator().getTotpPassword(creds.secretKey)}" else null}" to creds.password!!
                 ))
                 .url("https://www.reddit.com/api/v1/access_token")
                 .basicAuth(creds.clientId to creds.clientSecret)
